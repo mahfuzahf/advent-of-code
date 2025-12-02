@@ -1,6 +1,7 @@
 # imports
 import re
 import math
+import random
 
 # Constants
 INPUT = '2025/resources/day_3_input.txt'
