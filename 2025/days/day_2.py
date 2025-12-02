@@ -1,7 +1,5 @@
 # imports
 import re
-from sympy import factorint
-import math
 
 # Constants
 INPUT = '2025/resources/day_2_input.txt'
