@@ -1,7 +1,4 @@
 # imports
-import re
-import math
-import random
 
 # Constants
 INPUT = '2025/resources/day_3_input.txt'
@@ -22,38 +19,34 @@ def get_input(filename):
 
 #############################################################################################################
 
-batteries = get_input(INPUT)
+# batteries is list of each battery bank line as a string
 
-#############################################################################################################
+def part_1(batteries):
+    answer = 0
 
-# input is list of each line as a string
-# convert to int
+    # for each bank
+    for bank in batteries:
+        first = 0
+        first_index = 0
+        second = 0
 
-# answer = 0
+        # loop through for first battery
+        for i, char in enumerate(bank):
+            # if current battery is larger than what we have, replace
+            # only go until second last index, so we have one battery left for second
+            if (int(char) > first) and (i < len(bank) - 1):             
+                first = int(char)
+                first_index = i     # keep index of first battery to start second search from
 
-# for bank in batteries:
-#     first = 0
-#     first_index = 0
-#     second = 0
-#     second_index = 0
+        # now loop from first battery index to find best second battery
+        for i in range(first_index + 1, len(bank)):
+            if int(bank[i]) > second:
+                second = int(bank[i])
 
-#     # loop through
-#     for i, char in enumerate(bank):
-#         if (int(char) > first) and (i < len(bank) - 1):
-#             first = int(char)
-#             first_index = i
-
-#     # now loop from first index
-#     for i in range(first_index + 1, len(bank)):
-#         if int(bank[i]) > second:
-#             second = int(bank[i])
-#             second_index = i
-
-#     # combine first and second
-#     # print(int(str(first) + str(second)))
-#     answer = answer + (int(str(first) + str(second)))
-    
-# print(answer)
+        # combine first and second into a number and add to answer
+        answer = answer + (int(str(first) + str(second)))
+        
+    return answer
 
 #############################################################################################################
 
@@ -63,31 +56,39 @@ For second, as long as there's 10 left
 etc
 """
 
-answer = 0
+def part_2(batteries):
 
-# 987654321111111
-# 811111111111119
-for bank in batteries:
+    answer = 0
 
-    # keep indexes
-    indexes = [-1] * 12
-    digits = [0] * 12
-    length = 12
+    for bank in batteries:
 
-    # for each digit
-    for i in range(12):
-        # loop through from between previous index until how many we need left to find the largest
-        for j in range(indexes[i - 1] + 1, (len(bank) - length) + 1):
-            # if we found a larger one
-            if int(bank[j]) > digits[i]:
-                digits[i] = int(bank[j])
-                indexes[i] = j
+        # keep indexes and batteries(digits) to use
+        indexes = [-1] * 12
+        digits = [0] * 12
+        length = 12
 
-        # decrease length
-        length = length - 1
+        # for each digit (battery) in the bank
+        for i in range(12):
+            # loop through from between previous index until how many we need left to find the largest
+            for j in range(indexes[i - 1] + 1, (len(bank) - length) + 1):
+                # if we found a larger one
+                if int(bank[j]) > digits[i]:
+                    digits[i] = int(bank[j])    # replace the digit
+                    indexes[i] = j              # replace the index
 
-    # combine the digits
-    answer = answer + int("".join(map(str, digits)))
+            # decrease length left to search
+            length = length - 1
 
-    
-print(answer)
+        # combine the digits
+        answer = answer + int("".join(map(str, digits)))
+
+        
+    return answer
+
+
+##############################################################################################################
+
+# Answer
+batteries = get_input(INPUT)
+print("Part 1:", part_1(batteries))
+print("Part 2:", part_2(batteries))
