@@ -12,25 +12,28 @@ INPUTID = '2025/resources/day_5_input_id.txt'
 
 # merge ranges
 def merge_ranges(ranges):
+    # sort ranges
+    ranges = sorted(ranges)
+
     # convert to a massive range - initialise with first range in list
-    larger_ranges = [ranges[0]]
+    merged_ranges = [ranges[0]]
 
     # keep track of our current range
     current_range = 0
 
     for i in range(1, len(ranges)):
         # if the lower value of the range is within the current range
-        if ranges[i][0] <= larger_ranges[current_range][1]:
+        if ranges[i][0] <= merged_ranges[current_range][1]:
             # merge the range if the higher value is higher 
-            if larger_ranges[current_range][1] < ranges[i][1]:
-                larger_ranges[current_range][1] = ranges[i][1]
+            if merged_ranges[current_range][1] < ranges[i][1]:
+                merged_ranges[current_range][1] = ranges[i][1]
 
         else:
             # if not, have to make a separate range
-            larger_ranges.append(ranges[i])
+            merged_ranges.append(ranges[i])
             current_range += 1
 
-    return larger_ranges
+    return merged_ranges
 
 
 # get our input
@@ -43,7 +46,7 @@ def get_input(filename_range, filename_id):
     with open (filename_id, 'r') as f:
         ids_string = f.read().splitlines()
 
-    # sort our ranges
+    # split ranges up
     ranges = []
     for item in ranges_string:
         numbers = item.split('-') 
@@ -51,8 +54,7 @@ def get_input(filename_range, filename_id):
         higher = int(numbers[1])
         ranges.append([lower, higher])
 
-    ranges = sorted(ranges)
-    # now merge them
+    # now sort and merge them
     ranges = merge_ranges(ranges)
 
     ids = [int(item) for item in ids_string]
