@@ -85,8 +85,6 @@ def get_input_2(filename):
 
             while curr_len < c_len:
 
-                
-
                 if len(line[current_index]) > 0:
                     for char in line[current_index]:
                         line_chars.append(char)
